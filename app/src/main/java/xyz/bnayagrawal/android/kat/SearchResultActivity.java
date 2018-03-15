@@ -13,19 +13,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -38,7 +31,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import xyz.bnayagrawal.android.kat.adapter.SearchResultAdapter;
+import xyz.bnayagrawal.android.kat.adapter.TorrentRecyclerAdapter;
 import xyz.bnayagrawal.android.kat.data.Torrent;
 import xyz.bnayagrawal.android.kat.net.Kat;
 
@@ -71,7 +64,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private retrofit2.Call<String> mCall;
 
     private ArrayList<Torrent> mTorrents;
-    private SearchResultAdapter mAdapter;
+    private TorrentRecyclerAdapter mAdapter;
 
     private Animation mFadeInAnimation;
     private Animation mFadeOutAnimation;
@@ -97,7 +90,7 @@ public class SearchResultActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        //These lines wont execute if a new intent is requested
+        //These lines wont execute if a new intent is requested (as onCreate is not called)
         Intent data = getIntent();
         if(data != null) {
             handleIntent(data);
@@ -159,7 +152,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
         //Adapter
         mTorrents = new ArrayList<>();
-        mAdapter = new SearchResultAdapter(this,mTorrents);
+        mAdapter = new TorrentRecyclerAdapter(this,mTorrents);
         mRecyclerSearchResult.setAdapter(mAdapter);
     }
 

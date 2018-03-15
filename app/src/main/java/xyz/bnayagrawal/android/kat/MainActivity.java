@@ -8,21 +8,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import xyz.bnayagrawal.android.kat.adapter.SearchResultAdapter;
-import xyz.bnayagrawal.android.kat.data.Torrent;
-import xyz.bnayagrawal.android.kat.net.Kat;
 import xyz.bnayagrawal.android.kat.net.Url;
 
 public class MainActivity extends AppCompatActivity {
@@ -78,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
         mButtonBrowse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(MainActivity.this,BrowseTorrentsActivity.class);
+                startActivity(intent);
             }
         });
 

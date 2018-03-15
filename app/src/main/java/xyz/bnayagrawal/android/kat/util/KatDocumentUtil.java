@@ -27,6 +27,10 @@ public class KatDocumentUtil {
         Document document = Jsoup.parse(rawHtml);
         try {
             Elements searchTable = document.select("table#mainSearchTable");
+            //For browse category
+            if(searchTable.html().length() == 0)
+                searchTable = document.select("table.data");
+
             Elements tableRows = searchTable.select("tr.odd");
 
             //Empty search result

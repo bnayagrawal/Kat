@@ -3,6 +3,7 @@
     <string name="developer">bnayagrawal</string>
     <string name="activity_search_torrent">Search Torrents</string>
     <string name="activity_torrent_details">Torrent Details</string>
+    <string name="activity_browse_torrents">Browse Torrents</string>
 
     <!-- Progress -->
     <string name="loading">Loading&#8230;</string>
@@ -50,4 +51,10 @@
     <!-- Values for menu of activity_torrent_details.xml -->
     <string name="action_share">Share</string>
     <string name="action_open_in_browser">Open in browser</string>
+    <string name="title_activity_browse_torrents">BrowseTorrentsActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

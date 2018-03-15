@@ -15,4 +15,7 @@ public interface Kat {
 
     @GET("/{path}")
     Call<String> getDocument(@Path("path") String path);
+
+    @GET("/{path}/")
+    Call<String> getDocumentCategory(@Path("path") String path);
 }

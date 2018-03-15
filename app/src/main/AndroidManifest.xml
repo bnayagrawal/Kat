@@ -27,8 +27,8 @@
         </activity>
         <activity
             android:name=".SearchResultActivity"
-            android:launchMode="singleTop"
             android:label="@string/activity_search_torrent"
+            android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -49,7 +49,19 @@
 
         <activity
             android:name=".TorrentDetailsActivity"
-            android:label="@string/activity_torrent_details"/>
+            android:label="@string/activity_torrent_details" />
+
+        <activity
+            android:name=".BrowseTorrentsActivity"
+            android:label="@string/title_activity_browse_torrents"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+
+        </activity>
     </application>
 
 </manifest>
