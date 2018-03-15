@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/layoutBackground"
+    android:fillViewport="true"
+    tools:context="xyz.bnayagrawal.android.kat.TorrentDetailsActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/act_id__card__corner_radius"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_torrent_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/act_id__text_torrent_name__mrg_hrz"
+                    android:layout_marginStart="@dimen/act_id__text_torrent_name__mrg_hrz"
+                    android:layout_marginTop="@dimen/act_id__text_torrent_name__mrg_vrt"
+                    android:text="@string/loading"
+                    android:textColor="@color/primaryText"
+                    android:textSize="@dimen/text_size_semi_medium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Torrent Name" />
+
+                <TextView
+                    android:id="@+id/text_torrent_category_age"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/act_id__text_torrent_category_age__mrg_hrz"
+                    android:layout_marginStart="@dimen/act_id__text_torrent_category_age__mrg_hrz"
+                    android:layout_marginTop="@dimen/act_id__text_torrent_category_age__mrg_vrt"
+                    android:text="@string/loading"
+                    android:textColor="@color/secondaryText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_torrent_name"
+                    tools:text="Category \u2022 Age" />
+
+                <ImageView
+                    android:id="@+id/image_copy_hash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/act_id__image_copy_hash__mrg_vrt"
+                    android:layout_marginStart="@dimen/act_id__image_copy_hash__mrg_hrz"
+                    android:layout_marginTop="@dimen/act_id__image_copy_hash__mrg_vrt"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/content_description_copy_magnet_link"
+                    android:tint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age"
+                    app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+
+                <TextView
+                    android:id="@+id/text_torrent_hash"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/act_id__text_hash__mrg_vrt"
+                    android:layout_marginEnd="@dimen/act_id__text_hash__mrg_end"
+                    android:layout_marginStart="@dimen/act_id__text_hash__mrg_start"
+                    android:layout_marginTop="@dimen/act_id__text_hash__mrg_vrt"
+                    android:text="@string/loading"
+                    android:textColor="@color/primaryText"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/image_copy_hash"
+                    app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age"
+                    tools:text="hash: value" />
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_trackers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/act_id__card__mrg_top"
+            app:cardCornerRadius="@dimen/act_id__card__corner_radius"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_overview">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_label_torrent_trackers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/act_id__text_label_torrent_trackers__hrz"
+                    android:layout_marginStart="@dimen/act_id__text_label_torrent_trackers__hrz"
+                    android:layout_marginTop="@dimen/act_id__text_label_torrent_trackers__vrt"
+                    android:text="@string/label_torrent_trackers"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/text_torrent_trackers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="@dimen/act_id__linear_layout_tracker_list__mrg_top"
+                    android:text="@string/loading"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_label_torrent_trackers" />
+
+                <Button
+                    android:id="@+id/button_open_magnet_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/act_id__button_open_magnet_link__height"
+                    android:layout_marginBottom="@dimen/act_id__button_open_magnet_link__mrg_bottom"
+                    android:layout_marginEnd="@dimen/act_id__button_open_magnet_link__mrg_end"
+                    android:layout_marginTop="@dimen/act_id__button_open_magnet_link__mrg_top"
+                    android:background="@drawable/shape_button_background_solid"
+                    android:paddingEnd="@dimen/act_id__button_open_magnet_link__pdng_hrz"
+                    android:paddingStart="@dimen/act_id__button_open_magnet_link__pdng_hrz"
+                    android:text="@string/button_label_download"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/button_copy_magnet_link"
+                    app:layout_constraintTop_toBottomOf="@+id/text_torrent_trackers" />
+
+                <Button
+                    android:id="@+id/button_copy_magnet_link"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/act_id__button_copy_magnet_link__height"
+                    android:layout_marginBottom="@dimen/act_id__button_copy_magnet_link__mrg_bottom"
+                    android:layout_marginEnd="@dimen/act_id__button_copy_magnet_link__mrg_end"
+                    android:layout_marginStart="@dimen/act_id__button_copy_magnet_link__mrg_start"
+                    android:layout_marginTop="@dimen/act_id__button_copy_magnet_link__mrg_top"
+                    android:background="@drawable/shape_button_background_hollow"
+                    android:paddingEnd="@dimen/act_id__button_copy_magnet_link__pdng_hrz"
+                    android:paddingStart="@dimen/act_id__button_copy_magnet_link__pdng_hrz"
+                    android:text="@string/button_label_copy_magnet_link"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/button_open_magnet_link"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_torrent_trackers" />
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/act_id__card__mrg_top"
+            app:cardCornerRadius="@dimen/act_id__card__corner_radius"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_trackers">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_label_torrent_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/act_id__text_label_torrent_description__mrg_hrz"
+                    android:layout_marginStart="@dimen/act_id__text_label_torrent_description__mrg_hrz"
+                    android:layout_marginTop="@dimen/act_id__text_label_torrent_description__mrg_vrt"
+                    android:text="@string/label_torrent_description"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/text_torrent_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/loading"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_label_torrent_description" />
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

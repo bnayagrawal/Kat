@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">Kat</string>
+    <string name="developer">bnayagrawal</string>
+    <string name="activity_search_torrent">Search Torrents</string>
+    <string name="activity_torrent_details">Torrent Details</string>
+
+    <!-- Progress -->
+    <string name="loading">Loading&#8230;</string>
+
+    <!-- Symbols -->
+    <string name="symbol_bullet">\u2022</string>
+    <string name="symbol_right">\u2713</string>
+    <string name="symbol_wrong">\u2717</string>
+
+    <!-- Service names -->
+    <string name="kickass">Kickass</string>
+    <string name="torrents">Torrents</string>
+
+    <!-- Torrent -->
+    <string name="seeds">Seeds</string>
+    <string name="peers">Peers</string>
+
+    <!-- activity_main.xml -->
+    <string name="query_hint">Search</string>
+    <string name="button_search">search</string>
+    <string name="button_browse">browse</string>
+    <string name="icon_content_description">Kickass icon</string>
+
+    <!-- item_torrent.xml -->
+    <string name="content_description_file_icon">File Icon</string>
+    <string name="content_description_seeds_icon">Seeds Icon</string>
+    <string name="content_description_peers_icon">Peers Icon</string>
+
+    <!-- Values for menu of activity_search_result.xml -->
+    <string name="action_search">Search Torrents</string>
+
+    <!-- Values for activity_torrent_details.xml -->
+    <string name="label_torrent_quality">Torrent Quality</string>
+    <string name="verified_as_a_good_torrent">Verified as a good torrent</string>
+    <string name="fake">fake</string>
+    <string name="password">Password</string>
+    <string name="virus">Virus</string>
+    <string name="low_quality">Low Quality</string>
+    <string name="label_torrent_trackers">Torrent Trackers</string>
+    <string name="button_label_download">DOWNLOAD</string>
+    <string name="button_label_copy_magnet_link">COPY MAGNET LINK</string>
+    <string name="label_torrent_description">Torrent Description</string>
+    <string name="content_description_copy_magnet_link">Copy Magnet Link</string>
+
+    <!-- Values for menu of activity_torrent_details.xml -->
+    <string name="action_share">Share</string>
+    <string name="action_open_in_browser">Open in browser</string>
+</resources>

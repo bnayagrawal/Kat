@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- text sizes -->
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_semi_medium">16sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
+    <dimen name="text_size_semi_large">26sp</dimen>
+    <dimen name="text_size_large">32sp</dimen>
+    <dimen name="text_size_jumbo">98sp</dimen>
+
+    <!-- Values for the layout activity_item_details.xml -->
+    <dimen name="act_id__card__corner_radius">1dp</dimen>
+    <dimen name="act_id__card__mrg_top">8dp</dimen>
+
+    <dimen name="act_id__text_torrent_name__mrg_vrt">8dp</dimen>
+    <dimen name="act_id__text_torrent_name__mrg_hrz">16dp</dimen>
+
+    <dimen name="act_id__text_torrent_category_age__mrg_vrt">4dp</dimen>
+    <dimen name="act_id__text_torrent_category_age__mrg_hrz">16dp</dimen>
+
+    <dimen name="act_id__image_copy_hash__mrg_vrt">8dp</dimen>
+    <dimen name="act_id__image_copy_hash__mrg_hrz">16dp</dimen>
+
+    <dimen name="act_id__text_hash__mrg_vrt">8dp</dimen>
+    <dimen name="act_id__text_hash__mrg_start">8dp</dimen>
+    <dimen name="act_id__text_hash__mrg_end">16dp</dimen>
+
+    <dimen name="act_id__text_label_torrent_trackers__hrz">16dp</dimen>
+    <dimen name="act_id__text_label_torrent_trackers__vrt">8dp</dimen>
+
+    <dimen name="act_id__linear_layout_tracker_list__mrg_top">8dp</dimen>
+
+    <dimen name="act_id__button_open_magnet_link__height">32dp</dimen>
+    <dimen name="act_id__button_open_magnet_link__mrg_bottom">16dp</dimen>
+    <dimen name="act_id__button_open_magnet_link__mrg_end">16dp</dimen>
+    <dimen name="act_id__button_open_magnet_link__mrg_top">12dp</dimen>
+    <dimen name="act_id__button_open_magnet_link__pdng_hrz">16dp</dimen>
+
+    <dimen name="act_id__button_copy_magnet_link__height">32dp</dimen>
+    <dimen name="act_id__button_copy_magnet_link__mrg_bottom">16dp</dimen>
+    <dimen name="act_id__button_copy_magnet_link__mrg_end">8dp</dimen>
+    <dimen name="act_id__button_copy_magnet_link__mrg_start">16dp</dimen>
+    <dimen name="act_id__button_copy_magnet_link__mrg_top">12dp</dimen>
+    <dimen name="act_id__button_copy_magnet_link__pdng_hrz">16dp</dimen>
+
+    <dimen name="act_id__text_label_torrent_description__mrg_hrz">16dp</dimen>
+    <dimen name="act_id__text_label_torrent_description__mrg_vrt">8dp</dimen>
+
+    <!-- Values for layout item_torrent.xml -->
+    <dimen name="itm_t__text_torrent_name__mrg_hrz">16dp</dimen>
+    <dimen name="itm_t__text_torrent_name__mrg_vrt">8dp</dimen>
+
+    <dimen name="itm_t__text_torrent_category_age__mrg_hrz">16dp</dimen>
+    <dimen name="itm_t__text_torrent_category_age__mrg_vrt">4dp</dimen>
+
+    <dimen name="itm_t__image_icon_torrent_file__mrg_hrz">16dp</dimen>
+    <dimen name="itm_t__image_icon_torrent_file__mrg_vrt">8dp</dimen>
+
+    <dimen name="itm_t__text_torrent_file_size__mrg">8dp</dimen>
+
+    <dimen name="itm_t__image_icon_torrent_seeds__mrg">8dp</dimen>
+
+    <dimen name="itm_t__text_torrent_seeds_count__mrg">8dp</dimen>
+
+    <dimen name="itm_t__image_icon_torrent_peers__mrg">8dp</dimen>
+
+    <dimen name="itm_t__text_torrent_peers_count__mrg">8dp</dimen>
+
+    <!-- Values for layout item_search_suggestion.xml -->
+    <dimen name="itm_ss__text_search_suggestion_item__mrg_hrz">16dp</dimen>
+    <dimen name="itm_ss__text_search_suggestion_item__mrg_vrt">8dp</dimen>
+
+    <!-- Values for layout activity_search_result.xml -->
+
+</resources>

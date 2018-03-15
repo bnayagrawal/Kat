@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="xyz.bnayagrawal.android.kat.SearchResultActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_act_sra"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/search_view_act_sra"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="-16dp"
+                android:paddingEnd="0dp"
+                app:searchIcon="@null"
+                app:iconifiedByDefault="false"
+                app:queryHint="@string/query_hint" />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_search_result_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/constraint_progress_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/progress_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/text_searching"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:layout_marginTop="8dp"
+                android:textSize="@dimen/text_size_medium"
+                android:textColor="?attr/colorPrimary"
+                tools:text="Loading..."
+                app:layout_constraintTop_toBottomOf="@+id/progress_search"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+
