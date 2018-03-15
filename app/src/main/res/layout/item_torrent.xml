@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:focusable="true"
+    android:background="@drawable/ripple_effect"
     android:clickable="true"
-    android:background="@drawable/ripple_effect">
+    android:focusable="true"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/text_torrent_name"
@@ -17,9 +18,6 @@
         android:layout_marginTop="@dimen/itm_t__text_torrent_name__mrg_vrt"
         android:textColor="@color/primaryText"
         android:textSize="@dimen/text_size_semi_medium"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="Torrent name" />
 
     <TextView
@@ -30,93 +28,95 @@
         android:layout_marginStart="@dimen/itm_t__text_torrent_category_age__mrg_hrz"
         android:layout_marginTop="@dimen/itm_t__text_torrent_category_age__mrg_vrt"
         android:textColor="@color/secondaryText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_torrent_name"
         tools:text="Category \u2022 Age" />
 
-    <ImageView
-        android:id="@+id/image_icon_torrent_file"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/itm_t__image_icon_torrent_file__mrg_vrt"
-        android:layout_marginStart="@dimen/itm_t__image_icon_torrent_file__mrg_hrz"
-        android:layout_marginTop="@dimen/itm_t__image_icon_torrent_file__mrg_vrt"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/content_description_file_icon"
-        android:tint="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age"
-        app:srcCompat="@drawable/ic_save_black_24dp" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/text_torrent_file_size"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/itm_t__text_torrent_file_size__mrg"
-        android:layout_marginStart="@dimen/itm_t__text_torrent_file_size__mrg"
-        android:layout_marginTop="@dimen/itm_t__text_torrent_file_size__mrg"
-        android:textColor="@color/primaryText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_icon_torrent_file"
-        app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age"
-        tools:text="0 MB" />
+        <ImageView
+            android:id="@+id/image_icon_torrent_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/itm_t__image_icon_torrent_file__mrg_vrt"
+            android:layout_marginStart="@dimen/itm_t__image_icon_torrent_file__mrg_hrz"
+            android:layout_marginTop="@dimen/itm_t__image_icon_torrent_file__mrg_vrt"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_description_file_icon"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_save_black_24dp" />
 
-    <ImageView
-        android:id="@+id/image_icon_torrent_seeds"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/itm_t__image_icon_torrent_seeds__mrg"
-        android:layout_marginStart="@dimen/itm_t__image_icon_torrent_seeds__mrg"
-        android:layout_marginTop="@dimen/itm_t__image_icon_torrent_seeds__mrg"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/content_description_seeds_icon"
-        android:tint="@color/green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_torrent_file_size"
-        app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age"
-        app:srcCompat="@drawable/ic_arrow_drop_up_black_24dp" />
+        <TextView
+            android:id="@+id/text_torrent_file_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/itm_t__text_torrent_file_size__mrg"
+            android:layout_marginStart="@dimen/itm_t__text_torrent_file_size__mrg"
+            android:layout_marginTop="@dimen/itm_t__text_torrent_file_size__mrg"
+            android:textColor="@color/primaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_icon_torrent_file"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0 MB" />
 
-    <TextView
-        android:id="@+id/text_torrent_seeds_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/itm_t__text_torrent_seeds_count__mrg"
-        android:layout_marginStart="@dimen/itm_t__text_torrent_seeds_count__mrg"
-        android:layout_marginTop="@dimen/itm_t__text_torrent_seeds_count__mrg"
-        android:textColor="@color/primaryText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_icon_torrent_seeds"
-        app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age"
-        tools:text="Seeds 0" />
+        <ImageView
+            android:id="@+id/image_icon_torrent_seeds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/itm_t__image_icon_torrent_seeds__mrg"
+            android:layout_marginStart="@dimen/itm_t__image_icon_torrent_seeds__mrg"
+            android:layout_marginTop="@dimen/itm_t__image_icon_torrent_seeds__mrg"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_description_seeds_icon"
+            android:tint="@color/green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/text_torrent_file_size"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_drop_up_black_24dp" />
 
-    <ImageView
-        android:id="@+id/image_icon_torrent_peers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/itm_t__image_icon_torrent_peers__mrg"
-        android:layout_marginStart="@dimen/itm_t__image_icon_torrent_peers__mrg"
-        android:layout_marginTop="@dimen/itm_t__image_icon_torrent_peers__mrg"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/content_description_peers_icon"
-        android:tint="@color/red"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_torrent_seeds_count"
-        app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age"
-        app:srcCompat="@drawable/ic_arrow_drop_down_black_24dp" />
+        <TextView
+            android:id="@+id/text_torrent_seeds_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/itm_t__text_torrent_seeds_count__mrg"
+            android:layout_marginStart="@dimen/itm_t__text_torrent_seeds_count__mrg"
+            android:layout_marginTop="@dimen/itm_t__text_torrent_seeds_count__mrg"
+            android:textColor="@color/primaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_icon_torrent_seeds"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Seeds 0" />
 
-    <TextView
-        android:id="@+id/text_torrent_peers_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/itm_t__text_torrent_peers_count__mrg"
-        android:layout_marginStart="@dimen/itm_t__text_torrent_peers_count__mrg"
-        android:layout_marginTop="@dimen/itm_t__text_torrent_peers_count__mrg"
-        android:textColor="@color/primaryText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_icon_torrent_peers"
-        app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age"
-        tools:text="Peers 0" />
+        <ImageView
+            android:id="@+id/image_icon_torrent_peers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/itm_t__image_icon_torrent_peers__mrg"
+            android:layout_marginStart="@dimen/itm_t__image_icon_torrent_peers__mrg"
+            android:layout_marginTop="@dimen/itm_t__image_icon_torrent_peers__mrg"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_description_peers_icon"
+            android:tint="@color/red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/text_torrent_seeds_count"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_drop_down_black_24dp" />
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/text_torrent_peers_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/itm_t__text_torrent_peers_count__mrg"
+            android:layout_marginStart="@dimen/itm_t__text_torrent_peers_count__mrg"
+            android:layout_marginTop="@dimen/itm_t__text_torrent_peers_count__mrg"
+            android:textColor="@color/primaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_icon_torrent_peers"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Peers 0" />
+
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>
