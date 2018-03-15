@@ -54,35 +54,31 @@
                     app:layout_constraintTop_toBottomOf="@+id/text_torrent_name"
                     tools:text="Category \u2022 Age" />
 
-                <ImageView
-                    android:id="@+id/image_copy_hash"
-                    android:layout_width="wrap_content"
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/act_id__image_copy_hash__mrg_vrt"
-                    android:layout_marginStart="@dimen/act_id__image_copy_hash__mrg_hrz"
-                    android:layout_marginTop="@dimen/act_id__image_copy_hash__mrg_vrt"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/content_description_copy_magnet_link"
-                    android:tint="@color/colorPrimary"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/partial_torrent_details"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age"
-                    app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age">
+
+                    <include layout="@layout/partial_item_torrent" />
+
+                </android.support.constraint.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/text_torrent_hash"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/act_id__text_hash__mrg_vrt"
-                    android:layout_marginEnd="@dimen/act_id__text_hash__mrg_end"
-                    android:layout_marginStart="@dimen/act_id__text_hash__mrg_start"
-                    android:layout_marginTop="@dimen/act_id__text_hash__mrg_vrt"
+                    android:layout_marginEnd="@dimen/act_id__text_hash__mrg_hrz"
+                    android:layout_marginStart="@dimen/act_id__text_hash__mrg_hrz"
                     android:text="@string/loading"
                     android:textColor="@color/primaryText"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/image_copy_hash"
-                    app:layout_constraintTop_toBottomOf="@+id/text_torrent_category_age"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/partial_torrent_details"
                     tools:text="hash: value" />
             </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>

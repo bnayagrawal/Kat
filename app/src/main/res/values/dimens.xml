@@ -21,9 +21,8 @@
     <dimen name="act_id__image_copy_hash__mrg_vrt">8dp</dimen>
     <dimen name="act_id__image_copy_hash__mrg_hrz">16dp</dimen>
 
-    <dimen name="act_id__text_hash__mrg_vrt">8dp</dimen>
-    <dimen name="act_id__text_hash__mrg_start">8dp</dimen>
-    <dimen name="act_id__text_hash__mrg_end">16dp</dimen>
+    <dimen name="act_id__text_hash__mrg_vrt">16dp</dimen>
+    <dimen name="act_id__text_hash__mrg_hrz">16dp</dimen>
 
     <dimen name="act_id__text_label_torrent_trackers__hrz">16dp</dimen>
     <dimen name="act_id__text_label_torrent_trackers__vrt">8dp</dimen>
@@ -69,6 +68,7 @@
     <!-- Values for layout item_search_suggestion.xml -->
     <dimen name="itm_ss__text_search_suggestion_item__mrg_hrz">16dp</dimen>
     <dimen name="itm_ss__text_search_suggestion_item__mrg_vrt">8dp</dimen>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

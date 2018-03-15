@@ -44,6 +44,15 @@ public class TorrentDetailsActivity extends AppCompatActivity {
     @BindView(R.id.text_torrent_category_age)
     TextView mTextTorrentCategoryAge;
 
+    @BindView(R.id.text_torrent_file_size)
+    TextView mTextTorrentFileSize;
+
+    @BindView(R.id.text_torrent_seeds_count)
+    TextView mTextTorrentSeedsCount;
+
+    @BindView(R.id.text_torrent_peers_count)
+    TextView mTextTorrentPeersCount;
+
     @BindView(R.id.text_torrent_hash)
     TextView mTextTorrentHash;
 
@@ -58,9 +67,6 @@ public class TorrentDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.button_copy_magnet_link)
     Button mButtonCopyMagnetLink;
-
-    @BindView(R.id.image_copy_hash)
-    ImageView mImageCopyHash;
 
     private Kat mKat;
     private Retrofit mRetrofit;
@@ -157,7 +163,7 @@ public class TorrentDetailsActivity extends AppCompatActivity {
                 if(response.isSuccessful()) {
                     mTorrentDetails = getTorrentDetails(response.body());
                     if(mTorrentDetails != null) {
-                        mTextTorrentHash.setText("hash: ".concat(mTorrentDetails.getHash()));
+                        mTextTorrentHash.setText("BitTorrent info hash: ".concat(mTorrentDetails.getHash()));
                         mTextTorrentDescription.setText(mTorrentDetails.getDescription());
                         mTextTorrentTrackers.setText(mTorrentDetails.getTrackers());
                         setButtonClickListeners();
@@ -180,10 +186,17 @@ public class TorrentDetailsActivity extends AppCompatActivity {
 
     private void bindTorrentData() {
         mTextTorrentName.setText(mTorrent.getName());
+        String seeds = getString(R.string.seeds)
+                + " " + mTorrent.getSeeds();
+        String peers = getString(R.string.peers)
+                + " " + mTorrent.getPeers();
         String desc = mTorrent.getCategory()
                 + " " + getString(R.string.symbol_bullet)
                 + " " + mTorrent.getAge();
         mTextTorrentCategoryAge.setText(desc);
+        mTextTorrentFileSize.setText(mTorrent.getSize());
+        mTextTorrentSeedsCount.setText(seeds);
+        mTextTorrentPeersCount.setText(peers);
     }
 
     private void setButtonClickListeners() {
@@ -210,16 +223,6 @@ public class TorrentDetailsActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG)
                             .show();
                 }
-            }
-        });
-
-        mImageCopyHash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Torrent hash",mTorrentDetails.getHash());
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(TorrentDetailsActivity.this,"Torrent hash copied!",Toast.LENGTH_SHORT).show();
             }
         });
     }
