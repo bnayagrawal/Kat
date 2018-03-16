@@ -36,6 +36,8 @@ import static xyz.bnayagrawal.android.kat.util.KatDocumentUtil.getTorrentDetails
 
 public class TorrentDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_TORRENT = "torrent";
+    private static final String EXTRA_TORRENT_DETAILS = "torrent_details";
+
     private static final String TAG = TorrentDetailsActivity.class.getSimpleName();
 
     @BindView(R.id.text_torrent_name)
@@ -87,14 +89,26 @@ public class TorrentDetailsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Intent intentExtras = getIntent();
-        if(intentExtras.hasExtra(EXTRA_TORRENT)) {
-            mTorrent = intentExtras.getParcelableExtra(EXTRA_TORRENT);
-        }
+        if(savedInstanceState != null && savedInstanceState.containsKey(EXTRA_TORRENT)) {
+            mTorrent = savedInstanceState.getParcelable(EXTRA_TORRENT);
+            bindTorrentData();
 
-        initRetrofit();
-        bindTorrentData();
-        fetchTorrentDetails();
+            mTorrentDetails = savedInstanceState.getParcelable(EXTRA_TORRENT_DETAILS);
+            mTextTorrentHash.setText("BitTorrent info hash: ".concat(mTorrentDetails.getHash()));
+            mTextTorrentDescription.setText(mTorrentDetails.getDescription());
+            mTextTorrentTrackers.setText(mTorrentDetails.getTrackers());
+            setButtonClickListeners();
+
+        } else {
+            Intent intentExtras = getIntent();
+            if (intentExtras.hasExtra(EXTRA_TORRENT)) {
+                mTorrent = intentExtras.getParcelableExtra(EXTRA_TORRENT);
+            }
+
+            initRetrofit();
+            bindTorrentData();
+            fetchTorrentDetails();
+        }
     }
 
     @Override
@@ -139,8 +153,17 @@ public class TorrentDetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mTorrent != null && mTorrentDetails != null) {
+            outState.putParcelable(EXTRA_TORRENT, mTorrent);
+            outState.putParcelable(EXTRA_TORRENT_DETAILS, mTorrentDetails);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if(null != mCall && mCall.isExecuted())
             mCall.cancel();
     }
@@ -154,6 +177,7 @@ public class TorrentDetailsActivity extends AppCompatActivity {
     }
 
     private void fetchTorrentDetails() {
+        Toast.makeText(this,"Loading please wait...",Toast.LENGTH_LONG).show();
         if(mKat == null) mKat = mRetrofit.create(Kat.class);
         if(mCall != null && mCall.isExecuted()) mCall.cancel();
         mCall = mKat.getDocument(mTorrent.getDetailsPageLink());
@@ -200,16 +224,18 @@ public class TorrentDetailsActivity extends AppCompatActivity {
     }
 
     private void setButtonClickListeners() {
+        mButtonOpenMagnetLink.setEnabled(true);
         mButtonCopyMagnetLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("Magnet link",mTorrentDetails.getMagnetLink());
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(TorrentDetailsActivity.this,"Magnet link copied!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(TorrentDetailsActivity.this,"Magnet link copied to clipboard!",Toast.LENGTH_SHORT).show();
             }
         });
 
+        mButtonOpenMagnetLink.setEnabled(true);
         mButtonOpenMagnetLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -223,6 +249,16 @@ public class TorrentDetailsActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG)
                             .show();
                 }
+            }
+        });
+
+        mTextTorrentHash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Torrent hash",mTorrentDetails.getHash());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(TorrentDetailsActivity.this,"Hash copied to clipboard!",Toast.LENGTH_SHORT).show();
             }
         });
     }

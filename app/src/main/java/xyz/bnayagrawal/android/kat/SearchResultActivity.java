@@ -41,6 +41,8 @@ import static xyz.bnayagrawal.android.kat.util.KatDocumentUtil.getTorrentList;
 public class SearchResultActivity extends AppCompatActivity {
     private static final String TAG = SearchResultActivity.class.getSimpleName();
 
+    private static final String EXTRA_TORRENT_LIST = "torrent_list";
+
     @BindView(R.id.toolbar_act_sra)
     Toolbar mToolbar;
 
@@ -69,6 +71,8 @@ public class SearchResultActivity extends AppCompatActivity {
     private Animation mFadeInAnimation;
     private Animation mFadeOutAnimation;
 
+    private boolean torrentFound = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,10 +94,16 @@ public class SearchResultActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        //These lines wont execute if a new intent is requested (as onCreate is not called)
-        Intent data = getIntent();
-        if(data != null) {
-            handleIntent(data);
+        if(savedInstanceState != null && savedInstanceState.containsKey(EXTRA_TORRENT_LIST)) {
+            mTorrents = savedInstanceState.getParcelableArrayList(EXTRA_TORRENT_LIST);
+            if(null != mTorrents)
+                mAdapter.swapDataSet(mTorrents);
+        } else {
+            //These lines wont execute if a new intent is requested (as onCreate is not called)
+            Intent data = getIntent();
+            if (data != null) {
+                handleIntent(data);
+            }
         }
     }
 
@@ -113,8 +123,15 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(torrentFound && mTorrents.size() > 0)
+            outState.putParcelableArrayList(EXTRA_TORRENT_LIST,mTorrents);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if(null != mCall && mCall.isExecuted())
             mCall.cancel();
     }
@@ -195,6 +212,7 @@ public class SearchResultActivity extends AppCompatActivity {
                     }
                     else {
                         hideProgress();
+                        torrentFound = false;
                         Toast.makeText(SearchResultActivity.this, "No torrents found!", Toast.LENGTH_SHORT).show();
                     }
                 } else {

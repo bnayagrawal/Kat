@@ -42,6 +42,7 @@ import static xyz.bnayagrawal.android.kat.util.KatDocumentUtil.getTorrentList;
  */
 public class TabBrowseFragment extends Fragment {
     public static final String EXTRA_CATEGORY = "browse_category";
+    private static final String EXTRA_TORRENT_LIST = "torrent_list";
 
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefresh;
@@ -82,7 +83,15 @@ public class TabBrowseFragment extends Fragment {
             }
         });
 
-        fetchTorrents(mCategory);
+        if(savedInstanceState != null
+                && savedInstanceState.containsKey(EXTRA_TORRENT_LIST)
+                && savedInstanceState.containsKey(EXTRA_CATEGORY)) {
+            mTorrents = savedInstanceState.getParcelableArrayList(EXTRA_TORRENT_LIST);
+            mCategory = (TabPagerAdapter.Category) savedInstanceState.getSerializable(EXTRA_CATEGORY);
+            mAdapter.swapDataSet(mTorrents);
+        } else {
+            fetchTorrents(mCategory);
+        }
         return view;
     }
 
@@ -93,8 +102,17 @@ public class TabBrowseFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mTorrents != null && mTorrents.size() > 0) {
+            outState.putSerializable(EXTRA_CATEGORY, mCategory);
+            outState.putParcelableArrayList(EXTRA_TORRENT_LIST, mTorrents);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         if(null != mCall && mCall.isExecuted())
             mCall.cancel();
     }
