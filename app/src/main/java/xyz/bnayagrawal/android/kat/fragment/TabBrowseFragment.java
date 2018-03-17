@@ -2,6 +2,7 @@ package xyz.bnayagrawal.android.kat.fragment;
 
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,7 +27,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import xyz.bnayagrawal.android.kat.R;
-import xyz.bnayagrawal.android.kat.SearchResultActivity;
 import xyz.bnayagrawal.android.kat.adapter.TabPagerAdapter;
 import xyz.bnayagrawal.android.kat.adapter.TorrentRecyclerAdapter;
 import xyz.bnayagrawal.android.kat.data.Torrent;
@@ -59,6 +59,8 @@ public class TabBrowseFragment extends Fragment {
 
     private TabPagerAdapter.Category mCategory;
 
+    private int mLastLoadedPageNumber = 1;
+
     public TabBrowseFragment() {
         //Required
     }
@@ -68,7 +70,7 @@ public class TabBrowseFragment extends Fragment {
                              Bundle savedInstanceState) {
         mCategory = (TabPagerAdapter.Category) getArguments().getSerializable(EXTRA_CATEGORY);
         View view = inflater.inflate(R.layout.tab_fragment_browse, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
 
         initRecyclerView();
         initRetrofit();
@@ -76,21 +78,21 @@ public class TabBrowseFragment extends Fragment {
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(mAdapter != null && mTorrents != null) {
-                    mAdapter.notifyItemRangeRemoved(0,mTorrents.size());
-                    fetchTorrents(mCategory);
+                if (mAdapter != null && mTorrents != null) {
+                    mAdapter.notifyItemRangeRemoved(0, mTorrents.size());
+                    fetchTorrents(mCategory,1);
                 }
             }
         });
 
-        if(savedInstanceState != null
+        if (savedInstanceState != null
                 && savedInstanceState.containsKey(EXTRA_TORRENT_LIST)
                 && savedInstanceState.containsKey(EXTRA_CATEGORY)) {
             mTorrents = savedInstanceState.getParcelableArrayList(EXTRA_TORRENT_LIST);
             mCategory = (TabPagerAdapter.Category) savedInstanceState.getSerializable(EXTRA_CATEGORY);
             mAdapter.swapDataSet(mTorrents);
         } else {
-            fetchTorrents(mCategory);
+            fetchTorrents(mCategory,1);
         }
         return view;
     }
@@ -104,7 +106,7 @@ public class TabBrowseFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mTorrents != null && mTorrents.size() > 0) {
+        if (mTorrents != null && mTorrents.size() > 0) {
             outState.putSerializable(EXTRA_CATEGORY, mCategory);
             outState.putParcelableArrayList(EXTRA_TORRENT_LIST, mTorrents);
         }
@@ -113,7 +115,7 @@ public class TabBrowseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(null != mCall && mCall.isExecuted())
+        if (null != mCall && mCall.isExecuted())
             mCall.cancel();
     }
 
@@ -127,11 +129,37 @@ public class TabBrowseFragment extends Fragment {
 
     private void initRecyclerView() {
         //Layout Manager
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
+        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
                 getContext(),
                 LinearLayoutManager.VERTICAL,
                 false);
         mRecyclerTorrents.setLayoutManager(layoutManager);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mRecyclerTorrents.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                    if(mSwipeRefresh.isRefreshing())
+                        return;
+                    if(!mRecyclerTorrents.canScrollVertically(RecyclerView.VERTICAL)) {
+                        fetchTorrents(mCategory, mLastLoadedPageNumber + 1);
+                        Toast.makeText(getContext(),"Loading page " + String.valueOf(mLastLoadedPageNumber + 1) + ", Please wait!",Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        } else {
+            mRecyclerTorrents.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    if(mSwipeRefresh.isRefreshing())
+                        return;
+                    if(!mRecyclerTorrents.canScrollVertically(RecyclerView.VERTICAL)) {
+                        fetchTorrents(mCategory, mLastLoadedPageNumber + 1);
+                        Toast.makeText(getContext(),"Loading page " + String.valueOf(mLastLoadedPageNumber + 1) + ", Please wait!",Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
 
         //Item decorator (divider)
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
@@ -150,7 +178,7 @@ public class TabBrowseFragment extends Fragment {
 
         //Adapter
         mTorrents = new ArrayList<>();
-        mAdapter = new TorrentRecyclerAdapter(getContext(),mTorrents);
+        mAdapter = new TorrentRecyclerAdapter(getContext(), mTorrents);
         mRecyclerTorrents.setAdapter(mAdapter);
     }
 
@@ -179,30 +207,30 @@ public class TabBrowseFragment extends Fragment {
         return path;
     }
 
-    private void fetchTorrents(TabPagerAdapter.Category category) {
-        if(mKat == null) mKat = mRetrofit.create(Kat.class);
-        if(mCall != null && mCall.isExecuted()) mCall.cancel();
-        mCall = mKat.getDocumentCategory(getPath(category));
+    private void fetchTorrents(TabPagerAdapter.Category category, final int pageNo) {
+        if (mKat == null) mKat = mRetrofit.create(Kat.class);
+        if (mCall != null && mCall.isExecuted()) mCall.cancel();
+        mCall = mKat.getDocumentCategory(getPath(category),pageNo);
         mSwipeRefresh.setRefreshing(true);
         mCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 mSwipeRefresh.setRefreshing(false);
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ArrayList<Torrent> torrents = getTorrentList(response.body());
-                    if(torrents != null) {
+                    if (torrents != null) {
                         //Sucks, but only for animation to work.
-                        for(Torrent torrent: torrents) {
+                        for (Torrent torrent : torrents) {
                             mTorrents.add(torrent);
                             mAdapter.notifyItemInserted(torrents.size());
                         }
-                    }
-                    else {
+                        mLastLoadedPageNumber = pageNo;
+                    } else {
                         Toast.makeText(getContext(), "No torrents found!", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.d("tag",response.raw().request().url().toString());
-                    Toast.makeText(getContext(),"Error occur! Please retry",Toast.LENGTH_SHORT).show();
+                    Log.d("tag", response.raw().request().url().toString());
+                    Toast.makeText(getContext(), "Error occur! Please retry", Toast.LENGTH_SHORT).show();
                 }
             }
 
