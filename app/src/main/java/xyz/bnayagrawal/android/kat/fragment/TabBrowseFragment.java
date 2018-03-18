@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -56,6 +58,8 @@ public class TabBrowseFragment extends Fragment implements LoaderManager.LoaderC
     private static final int ASYNC_APPS_LOADER_TASK_ID = 401;
     private static final int ASYNC_BOOKS_LOADER_TASK_ID = 501;
     private static final int ASYNC_GAMES_LOADER_TASK_ID = 601;
+
+    private Toast mToast;
 
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefresh;
@@ -107,6 +111,7 @@ public class TabBrowseFragment extends Fragment implements LoaderManager.LoaderC
             mAdapter.swapDataSet(mTorrents);
         } else {
             fetchTorrents(mCategory,1);
+            getLoaderManager().initLoader(getTaskId(),null,this);
         }
 
         return view;
@@ -144,7 +149,7 @@ public class TabBrowseFragment extends Fragment implements LoaderManager.LoaderC
 
     private void initRecyclerView() {
         //Layout Manager
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
+        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
                 getContext(),
                 LinearLayoutManager.VERTICAL,
                 false);
@@ -153,9 +158,11 @@ public class TabBrowseFragment extends Fragment implements LoaderManager.LoaderC
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mRecyclerTorrents.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
-                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                public void onScrollChange(View view, int currentScrollX, int currentScrollY, int oldScrollX, int oldScrollY) {
                     if(mSwipeRefresh.isRefreshing())
                         return;
+
+                    //TODO: Fix unusual behaviour (getting triggered twice when scrolled to the end for 3rd page)
                     if(!mRecyclerTorrents.canScrollVertically(RecyclerView.VERTICAL)) {
                         fetchTorrents(mCategory, mLastLoadedPageNumber + 1);
                         Toast.makeText(getContext(),"Loading page " + String.valueOf(mLastLoadedPageNumber + 1) + ", Please wait!",Toast.LENGTH_LONG).show();
@@ -168,6 +175,8 @@ public class TabBrowseFragment extends Fragment implements LoaderManager.LoaderC
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     if(mSwipeRefresh.isRefreshing())
                         return;
+
+                    //TODO: Fix unusual behaviour (getting triggered twice when scrolled to the end for 3rd page)
                     if(!mRecyclerTorrents.canScrollVertically(RecyclerView.VERTICAL)) {
                         fetchTorrents(mCategory, mLastLoadedPageNumber + 1);
                         Toast.makeText(getContext(),"Loading page " + String.valueOf(mLastLoadedPageNumber + 1) + ", Please wait!",Toast.LENGTH_LONG).show();
@@ -322,18 +331,19 @@ public class TabBrowseFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<ArrayList<Torrent>> loader, ArrayList<Torrent> torrents) {
+        // When you navigate away from this tab and comeback temp data is loaded
+        // So clear data loaded by asyncTaskLoader if its first page.
+        if(mLastLoadedPageNumber == 1 && mTorrents.size() > 0) {
+            mTorrents.clear();
+            mAdapter.notifyItemRangeRemoved(0,mTorrents.size());
+        }
+
         if (torrents != null) {
-            int position = mTorrents.size() + 3;
             //Sucks, but only for animation to work.
             for (Torrent torrent : torrents) {
                 mTorrents.add(torrent);
                 mAdapter.notifyItemInserted(torrents.size());
             }
-
-            //TODO: Fix unusual behaviour
-            if(position < mTorrents.size())
-                mRecyclerTorrents.smoothScrollToPosition(position);
-
         } else {
             Toast.makeText(getContext(), "No torrents found!", Toast.LENGTH_SHORT).show();
         }
