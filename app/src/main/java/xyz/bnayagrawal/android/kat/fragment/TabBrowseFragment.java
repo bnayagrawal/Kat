@@ -5,6 +5,9 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,9 +43,19 @@ import static xyz.bnayagrawal.android.kat.util.KatDocumentUtil.getTorrentList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TabBrowseFragment extends Fragment {
+public class TabBrowseFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<Torrent>> {
+    private static final String TAG = TabBrowseFragment.class.getSimpleName();
     public static final String EXTRA_CATEGORY = "browse_category";
     private static final String EXTRA_TORRENT_LIST = "torrent_list";
+    private static final String EXTRA_PAGE_NO = "page_no";
+    private static final String EXTRA_RAW_HTML_TEXT = "raw_html_text";
+
+    private static final int ASYNC_MOVIES_LOADER_TASK_ID = 101;
+    private static final int ASYNC_TV_LOADER_TASK_ID = 201;
+    private static final int ASYNC_MUSIC_LOADER_TASK_ID = 301;
+    private static final int ASYNC_APPS_LOADER_TASK_ID = 401;
+    private static final int ASYNC_BOOKS_LOADER_TASK_ID = 501;
+    private static final int ASYNC_GAMES_LOADER_TASK_ID = 601;
 
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefresh;
@@ -79,6 +92,7 @@ public class TabBrowseFragment extends Fragment {
             @Override
             public void onRefresh() {
                 if (mAdapter != null && mTorrents != null) {
+                    mTorrents.clear();
                     mAdapter.notifyItemRangeRemoved(0, mTorrents.size());
                     fetchTorrents(mCategory,1);
                 }
@@ -94,6 +108,7 @@ public class TabBrowseFragment extends Fragment {
         } else {
             fetchTorrents(mCategory,1);
         }
+
         return view;
     }
 
@@ -129,7 +144,7 @@ public class TabBrowseFragment extends Fragment {
 
     private void initRecyclerView() {
         //Layout Manager
-        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
                 getContext(),
                 LinearLayoutManager.VERTICAL,
                 false);
@@ -207,6 +222,31 @@ public class TabBrowseFragment extends Fragment {
         return path;
     }
 
+    private int getTaskId() {
+        int id = 0;
+        switch (mCategory) {
+            case MOVIES:
+                id = ASYNC_MOVIES_LOADER_TASK_ID;
+                break;
+            case TV:
+                id = ASYNC_TV_LOADER_TASK_ID;
+                break;
+            case MUSIC:
+                id = ASYNC_MUSIC_LOADER_TASK_ID;
+                break;
+            case APPS:
+                id = ASYNC_APPS_LOADER_TASK_ID;
+                break;
+            case BOOKS:
+                id = ASYNC_BOOKS_LOADER_TASK_ID;
+                break;
+            case GAMES:
+                id = ASYNC_GAMES_LOADER_TASK_ID;
+                break;
+        }
+        return id;
+    }
+
     private void fetchTorrents(TabPagerAdapter.Category category, final int pageNo) {
         if (mKat == null) mKat = mRetrofit.create(Kat.class);
         if (mCall != null && mCall.isExecuted()) mCall.cancel();
@@ -217,19 +257,19 @@ public class TabBrowseFragment extends Fragment {
             public void onResponse(Call<String> call, Response<String> response) {
                 mSwipeRefresh.setRefreshing(false);
                 if (response.isSuccessful()) {
-                    ArrayList<Torrent> torrents = getTorrentList(response.body());
-                    if (torrents != null) {
-                        //Sucks, but only for animation to work.
-                        for (Torrent torrent : torrents) {
-                            mTorrents.add(torrent);
-                            mAdapter.notifyItemInserted(torrents.size());
-                        }
-                        mLastLoadedPageNumber = pageNo;
+                    Bundle bundle = new Bundle();
+                    bundle.putString(EXTRA_RAW_HTML_TEXT,response.body());
+                    bundle.putInt(EXTRA_PAGE_NO,pageNo);
+
+                    LoaderManager loaderManager = getLoaderManager();
+                    Loader<String> documentParserLoader = loaderManager.getLoader(getTaskId());
+
+                    if (documentParserLoader == null) {
+                        loaderManager.initLoader(getTaskId(), bundle, TabBrowseFragment.this);
                     } else {
-                        Toast.makeText(getContext(), "No torrents found!", Toast.LENGTH_SHORT).show();
+                        loaderManager.restartLoader(getTaskId(), bundle, TabBrowseFragment.this);
                     }
                 } else {
-                    Log.d("tag", response.raw().request().url().toString());
                     Toast.makeText(getContext(), "Error occur! Please retry", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -239,5 +279,68 @@ public class TabBrowseFragment extends Fragment {
                 t.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public Loader<ArrayList<Torrent>> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<ArrayList<Torrent>>(getActivity()) {
+
+            ArrayList<Torrent> processedData;
+
+            @Override
+            protected void onStartLoading() {
+                //The args is expected to contain the raw html text.
+                if(args == null)
+                    return;
+
+                if(processedData != null)
+                    deliverResult(processedData);
+                else
+                    forceLoad();
+            }
+
+            @Override
+            public ArrayList<Torrent> loadInBackground() {
+                String rawHtmlText = args.getString(EXTRA_RAW_HTML_TEXT);
+                if(rawHtmlText == null || rawHtmlText.length() == 0)
+                    return null;
+
+                ArrayList<Torrent> torrents = getTorrentList(rawHtmlText);
+                if(torrents != null && torrents.size() > 0)
+                    mLastLoadedPageNumber = args.getInt(EXTRA_PAGE_NO);
+
+                return torrents;
+            }
+
+            @Override
+            public void deliverResult(ArrayList<Torrent> data) {
+                processedData = data;
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Torrent>> loader, ArrayList<Torrent> torrents) {
+        if (torrents != null) {
+            int position = mTorrents.size() + 3;
+            //Sucks, but only for animation to work.
+            for (Torrent torrent : torrents) {
+                mTorrents.add(torrent);
+                mAdapter.notifyItemInserted(torrents.size());
+            }
+
+            //TODO: Fix unusual behaviour
+            if(position < mTorrents.size())
+                mRecyclerTorrents.smoothScrollToPosition(position);
+
+        } else {
+            Toast.makeText(getContext(), "No torrents found!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Torrent>> loader) {
+        //Unimplemented...
     }
 }

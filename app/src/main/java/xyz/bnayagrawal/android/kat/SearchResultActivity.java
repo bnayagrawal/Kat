@@ -5,6 +5,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -38,10 +42,11 @@ import xyz.bnayagrawal.android.kat.net.Kat;
 import static xyz.bnayagrawal.android.kat.net.Url.BASE_URL;
 import static xyz.bnayagrawal.android.kat.util.KatDocumentUtil.getTorrentList;
 
-public class SearchResultActivity extends AppCompatActivity {
+public class SearchResultActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Torrent>> {
     private static final String TAG = SearchResultActivity.class.getSimpleName();
-
     private static final String EXTRA_TORRENT_LIST = "torrent_list";
+    private static final String EXTRA_RAW_HTML_TEXT = "raw_html_text";
+    private static final int ASYNC_LOADER_TASK_DOCUMENT_PARSER_ID = 101;
 
     @BindView(R.id.toolbar_act_sra)
     Toolbar mToolbar;
@@ -100,6 +105,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 mAdapter.swapDataSet(mTorrents);
         } else {
             //These lines wont execute if a new intent is requested (as onCreate is not called)
+            getSupportLoaderManager().initLoader(ASYNC_LOADER_TASK_DOCUMENT_PARSER_ID,null,this);
             Intent data = getIntent();
             if (data != null) {
                 handleIntent(data);
@@ -109,7 +115,6 @@ public class SearchResultActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 
@@ -134,6 +139,63 @@ public class SearchResultActivity extends AppCompatActivity {
         super.onDestroy();
         if(null != mCall && mCall.isExecuted())
             mCall.cancel();
+    }
+
+    @Override
+    public Loader<ArrayList<Torrent>> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<ArrayList<Torrent>>(this) {
+
+            ArrayList<Torrent> processedData;
+
+            @Override
+            protected void onStartLoading() {
+                //The args is expected to contain the raw html text.
+                if(args == null)
+                    return;
+
+                if(processedData != null)
+                    deliverResult(processedData);
+                else
+                    forceLoad();
+            }
+
+            @Override
+            public ArrayList<Torrent> loadInBackground() {
+                String rawHtmlText = args.getString(EXTRA_RAW_HTML_TEXT);
+                if(rawHtmlText == null || rawHtmlText.length() == 0)
+                    return null;
+                return getTorrentList(rawHtmlText);
+            }
+
+            @Override
+            public void deliverResult(ArrayList<Torrent> data) {
+                processedData = data;
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Torrent>> loader, ArrayList<Torrent> torrents) {
+        if(torrents != null) {
+            //Sucks, but only for animation to work.
+            for(Torrent torrent: torrents) {
+                mTorrents.add(torrent);
+                mAdapter.notifyItemInserted(torrents.size());
+            }
+            hideProgress();
+            Toast.makeText(SearchResultActivity.this,torrents.size() + " torrents found!",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            hideProgress();
+            torrentFound = false;
+            Toast.makeText(SearchResultActivity.this, "No torrents found!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Torrent>> loader) {
+        //Unimplemented...
     }
 
     private void initSearchView() {
@@ -199,22 +261,19 @@ public class SearchResultActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if(response.isSuccessful()) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(EXTRA_RAW_HTML_TEXT,response.body());
+
+                    LoaderManager loaderManager = getSupportLoaderManager();
+                    Loader<String> documentParserLoader = loaderManager.getLoader(ASYNC_LOADER_TASK_DOCUMENT_PARSER_ID);
+
                     showProgress("Parsing data...");
-                    ArrayList<Torrent> torrents = getTorrentList(response.body());
-                    if(torrents != null) {
-                        //Sucks, but only for animation to work.
-                        for(Torrent torrent: torrents) {
-                            mTorrents.add(torrent);
-                            mAdapter.notifyItemInserted(torrents.size());
-                        }
-                        hideProgress();
-                        Toast.makeText(SearchResultActivity.this,torrents.size() + " torrents found!",Toast.LENGTH_SHORT).show();
+                    if (documentParserLoader == null) {
+                        loaderManager.initLoader(ASYNC_LOADER_TASK_DOCUMENT_PARSER_ID, bundle, SearchResultActivity.this);
+                    } else {
+                        loaderManager.restartLoader(ASYNC_LOADER_TASK_DOCUMENT_PARSER_ID, bundle, SearchResultActivity.this);
                     }
-                    else {
-                        hideProgress();
-                        torrentFound = false;
-                        Toast.makeText(SearchResultActivity.this, "No torrents found!", Toast.LENGTH_SHORT).show();
-                    }
+
                 } else {
                     Toast.makeText(SearchResultActivity.this,"Error occur! Please retry",Toast.LENGTH_SHORT).show();
                 }
@@ -241,4 +300,6 @@ public class SearchResultActivity extends AppCompatActivity {
         mRecyclerSearchResult.setVisibility(View.VISIBLE);
         mRecyclerSearchResult.startAnimation(mFadeInAnimation);
     }
+
+
 }
