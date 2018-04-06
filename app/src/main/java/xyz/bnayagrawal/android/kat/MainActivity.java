@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 new ComponentName(getApplicationContext(), SearchResultActivity.class))
         );
         searchView.setIconifiedByDefault(false);
-
     }
 
     private void initButtons() {

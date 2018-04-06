@@ -25,6 +25,7 @@
                 android:layout_height="match_parent"
                 android:paddingStart="-16dp"
                 android:paddingEnd="0dp"
+                android:inputType="text"
                 app:searchIcon="@null"
                 app:iconifiedByDefault="false"
                 app:queryHint="@string/query_hint" />

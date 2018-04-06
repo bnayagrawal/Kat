@@ -19,13 +19,16 @@
         <item name="android:textColorSecondaryInverse">@color/secondaryTextInverted</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fontFamily">@font/lato</item>
     </style>
 
     <style name="SearchWidgetTheme" parent="Base.Widget.AppCompat.SearchView">
         <item name="closeIcon">@drawable/ic_close</item>
         <item name="searchIcon">@drawable/ic_search</item>
         <item name="voiceIcon">@drawable/ic_microphone</item>
-        <item name="android:background">@drawable/shape_rectangle</item>
+        <item name="queryBackground">@android:color/white</item>
+        <item name="submitBackground">@android:color/white</item>
+        <item name="android:fontFamily">@font/lato</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -35,5 +38,6 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
 </resources>

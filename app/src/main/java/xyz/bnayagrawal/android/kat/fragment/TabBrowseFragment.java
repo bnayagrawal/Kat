@@ -92,6 +92,7 @@ public class TabBrowseFragment extends Fragment implements LoaderManager.LoaderC
         initRecyclerView();
         initRetrofit();
 
+        mSwipeRefresh.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
