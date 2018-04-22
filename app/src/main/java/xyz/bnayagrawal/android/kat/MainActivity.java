@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 } catch (ActivityNotFoundException ex) {
                     Toast.makeText(MainActivity.this,
-                            "Web browser not installed!",
+                            "You need a web browser to perform this task!",
                             Toast.LENGTH_LONG)
                             .show();
                 }
