@@ -32,11 +32,11 @@ dependencies {
     //Libraries
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-scalars:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'org.jsoup:jsoup:1.11.2'
-    compile 'jp.wasabeef:recyclerview-animators:2.2.7'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'org.jsoup:jsoup:1.11.2'
+    implementation 'jp.wasabeef:recyclerview-animators:2.2.7'
 }
