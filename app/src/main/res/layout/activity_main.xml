@@ -112,6 +112,7 @@
             android:drawableTop="@drawable/ic_github"
             android:fontFamily="@font/lato"
             android:text="@string/developer"
+            android:drawablePadding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
